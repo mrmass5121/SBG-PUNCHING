@@ -22,8 +22,11 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"S.B.G. Punching","description":"CNC Punching, Laser Cutting, Sheet Metal Fabrication and Control Panels in Bangalore","telephone":"+918892181792","email":"sbgpunching@gmail.com","address":{"@type":"PostalAddress","streetAddress":"#61/16, Katha No. 501/1093, Nadakerappa Industrial Estate, Hegganahalli","addressLocality":"Bangalore","postalCode":"560091","addressCountry":"IN"},"openingHours":"Mo-Sa 09:00-18:00","priceRange":"₹₹"}</script>
 <title>S.B.G. PUNCHING — CNC Punching & Sheet Metal Fabrication, Bangalore</title>
 <link rel="manifest" href="/manifest.webmanifest">
+<link rel="canonical" href="https://www.sbgpunching.in/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://wa.me">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════
@@ -71,30 +74,30 @@ button{cursor:pointer;border:none;background:none;font-family:var(--ff-body)}
   background:var(--bg);display:flex;
   align-items:center;justify-content:center;
   flex-direction:column;gap:24px;
-  transition:opacity .5s ease,visibility .5s ease;
+  transition:opacity .8s ease,visibility .8s ease;
 }
 #intro.hidden{opacity:0;visibility:hidden}
 .intro-logo-text{
   font-family:var(--ff-display);
   font-size:clamp(2.5rem,6vw,5rem);
   letter-spacing:.2em;color:var(--text);
-  opacity:0;animation:introFadeUp .5s .5s forwards;
+  opacity:0;animation:introFadeUp .8s .3s forwards;
 }
 .intro-logo-text span{color:var(--green)}
 .intro-tagline{
   font-family:var(--ff-mono);font-size:.7rem;
   letter-spacing:.4em;color:var(--steel);
-  opacity:0;animation:introFadeUp .5s .5s forwards;
+  opacity:0;animation:introFadeUp .8s .6s forwards;
 }
 .intro-bar{
   width:200px;height:2px;background:var(--border);
   overflow:hidden;border-radius:2px;
-  opacity:0;animation:introFadeUp .5s .5s forwards;
+  opacity:0;animation:introFadeUp .8s .7s forwards;
 }
 .intro-bar-fill{
   height:100%;width:0;background:var(--green);
   box-shadow:0 0 12px var(--green);
-  animation:introLoad 0.8s 0.8s cubic-bezier(.4,0,.2,1) forwards;
+  animation:introLoad 1.8s 0.8s cubic-bezier(.4,0,.2,1) forwards;
 }
 @keyframes introFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes introLoad{from{width:0}to{width:100%}}
@@ -2338,7 +2341,7 @@ footer{
         <span class="svc-tag">PROTOTYPE TO PRODUCTION</span>
         <span class="svc-more">Fabrication details →</span>
       </a>
-      <a class="svc-card reveal" href="/control-panel-enclosures/" style="transition-delay:.15s">
+      <a class="svc-card reveal" href="/control-panel-enclosures/" style="transition-delay:.25s">
         <div class="svc-number">05</div>
         <div class="svc-icon-wrap">
           <svg class="svc-icon" viewBox="0 0 28 28" fill="none" stroke="var(--green)" stroke-width="1.5">
@@ -2352,7 +2355,7 @@ footer{
         <span class="svc-tag">ELECTRICAL · AUTOMATION</span>
         <span class="svc-more">Enclosure details →</span>
       </a>
-      <a class="svc-card reveal" href="/ms-sheet-cutting/" style="transition-delay:.15s">
+      <a class="svc-card reveal" href="/ms-sheet-cutting/" style="transition-delay:.3s">
         <div class="svc-number">06</div>
         <div class="svc-icon-wrap">
           <svg class="svc-icon" viewBox="0 0 28 28" fill="none" stroke="var(--green)" stroke-width="1.5">
@@ -2570,9 +2573,9 @@ footer{
 <!-- LIGHTBOX -->
 <div id="lightbox">
   <button class="lb-close" onclick="closeLightbox()" aria-label="Close production details">✕</button>
-  <button class="lb-nav lb-prev" onclick="event.stopPropagation();lightboxNav(-1)">&#8592;</button>
+  <button class="lb-nav lb-prev" onclick="event.stopPropagation();lightboxNav(-1)" aria-label="Previous image">←</button>
   <div class="lb-inner" id="productDetail" onclick="event.stopPropagation()"></div>
-  <button class="lb-nav lb-next" onclick="event.stopPropagation();lightboxNav(1)">&#8594;</button>
+  <button class="lb-nav lb-next" onclick="event.stopPropagation();lightboxNav(1)" aria-label="Next image">→</button>
 </div>
 
 <!-- ═══════════ CONTACT ═══════════ -->
@@ -2612,58 +2615,58 @@ footer{
             <a href="https://wa.me/918892181792" class="btn-primary" style="display:inline-flex;margin-top:20px" target="_blank" rel="noopener noreferrer">Also WhatsApp Us</a>
           </div>
           <div id="formBody">
-            <div class="form-title">GET FREE QUOTE</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Your Name *</label>
-                <input type="text" id="fname" placeholder="Rajesh Kumar" required>
-              </div>
-              <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" id="fcompany" placeholder="ABC Industries">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Phone Number *</label>
-                <input type="tel" id="fphone" placeholder="Enter phone number" required>
-              </div>
-              <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="femail" placeholder="rajesh@company.com">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group full">
-                <label>Service Required *</label>
-                <select id="fservice" required>
-                  <option value="">— Select a service —</option>
-                  <option>CNC Punching</option>
-                  <option>Laser Cutting</option>
-                  <option>Sheet Bending</option>
-                  <option>Fabrication Works</option>
-                  <option>Control Panels</option>
-                  <option>Job Works</option>
-                  <option>Multiple Services</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group full">
-                <label>Material &amp; Thickness</label>
-                <input type="text" id="fmaterial" placeholder="e.g. MS 2mm, SS 304 1.5mm">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group full">
-                <label>Your Requirements *</label>
-                <textarea id="fmessage" rows="4" placeholder="Describe your requirement — quantity, dimensions, deadline…" required></textarea>
-              </div>
-            </div>
-            <div class="captcha-field" data-turnstile="inquiry"></div>
-            <button class="btn-submit" onclick="submitForm()">Send Enquiry via WhatsApp →</button>
-            <p class="form-note">* Clicking Send will open WhatsApp with your details pre-filled.</p>
-          </div>
+  <div class="form-title">GET FREE QUOTE</div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="fname">Your Name *</label>
+      <input type="text" id="fname" placeholder="Rajesh Kumar" required>
+    </div>
+    <div class="form-group">
+      <label for="fcompany">Company Name</label>
+      <input type="text" id="fcompany" placeholder="ABC Industries">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="fphone">Phone Number *</label>
+      <input type="tel" id="fphone" placeholder="Enter phone number" required>
+    </div>
+    <div class="form-group">
+      <label for="femail">Email Address</label>
+      <input type="email" id="femail" placeholder="rajesh@company.com">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group full">
+      <label for="fservice">Service Required *</label>
+      <select id="fservice" required>
+        <option value="">— Select a service —</option>
+        <option>CNC Punching</option>
+        <option>Laser Cutting</option>
+        <option>Sheet Bending</option>
+        <option>Fabrication Works</option>
+        <option>Control Panels</option>
+        <option>Job Works</option>
+        <option>Multiple Services</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group full">
+      <label for="fmaterial">Material & Thickness</label>
+      <input type="text" id="fmaterial" placeholder="e.g. MS 2mm, SS 304 1.5mm">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group full">
+      <label for="fmessage">Your Requirements *</label>
+      <textarea id="fmessage" rows="4" placeholder="Describe your requirement — quantity, dimensions, deadline…" required></textarea>
+    </div>
+  </div>
+  <div class="captcha-field" data-turnstile="inquiry"></div>
+  <button class="btn-submit" onclick="submitForm()">Send Enquiry via WhatsApp →</button>
+  <p class="form-note">* Clicking Send will open WhatsApp with your details pre-filled.</p>
+</div>
         </div>
       </div>
     </div>
@@ -2751,21 +2754,21 @@ window.SBG_CONFIG=Object.assign({},window.SBG_CONFIG||{},{
   serverlessBaseUrl:(window.SBG_CONFIG&&window.SBG_CONFIG.serverlessBaseUrl)||'/api'
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script>
 
 /* ─── INTRO ─── */
 window.addEventListener('load',()=>{
   setTimeout(()=>{
     document.getElementById('intro').classList.add('hidden');
-  },250);
+  },800);
 });
 
 /* ─── HEADER SCROLL ─── */
 const header=document.getElementById('mainHeader');
 window.addEventListener('scroll',()=>{
   header.classList.toggle('scrolled',window.scrollY>60);
-});
+}, { passive: true });
 
 /* ─── MOBILE MENU ─── */
 function openMobileMenu(){
@@ -2815,7 +2818,7 @@ function closeMobileMenu(){
   const particleCount = window.innerWidth < 768 ? 40 : 120;
 for(let i=0;i<particleCount;i++)particles.push(new Particle());
   let mouseX=W/2,mouseY=H/2;
-  document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});
+  document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY}, { passive: true });
   function loop(){
     ctx.clearRect(0,0,W,H);
     // connections
@@ -3473,32 +3476,41 @@ function productQuoteMessage(product){
 }
 function quoteClickInquiry(product){
   return {
-    company_name:'Website product quote click',
-    contact_name:'Quote Button Click',
-    phone:`quote-${Date.now().toString(36)}`.slice(0,40),
+    company_name:'Gallery Quote Click',
+    contact_name:`Gallery: ${String(product?.name||'Production Item').slice(0,80)}`,
+    phone:'gallery-quote-click',
     email:'',
-    service:String(product?.name||product?.cat||'Product Quote').slice(0,120),
+    service:String(product?.cat||product?.name||'Product Quote').slice(0,120),
     message:[
-      'Customer clicked Request Quote for this product.',
+      'A visitor clicked "Request Quote" on the production gallery.',
       '',
       productMessageDetails(product),
       '',
       `Product URL: ${currentProductUrl(product)}`,
       '',
-      'Contact details were not collected on this quick quote click. Check WhatsApp for the customer message.'
+      'Note: Contact details are collected on WhatsApp after this click.'
     ].join('\n').slice(0,1200),
-    source:'quote-click'
+    source:'website'
   };
 }
 function logQuoteClick(product){
-  if(!product||!sbgClient)return;
+  if(!product)return;
   const key=`sbg_quote_click_${productSlug(product)}`;
   const last=Number(sessionStorage.getItem(key)||0);
   if(Date.now()-last<3000)return;
   sessionStorage.setItem(key,String(Date.now()));
-  sbgClient.from('inquiries').insert(quoteClickInquiry(product)).then(({error})=>{
-    if(error)console.warn('Quote click inquiry log failed:',error.message||error);
-  });
+  const inquiry=quoteClickInquiry(product);
+  if(sbgClient){
+    sbgClient.from('inquiries').insert(inquiry).then(({error})=>{
+      if(error)console.warn('Quote click inquiry log failed:',error.message||error);
+    });
+  }else{
+    try{
+      const stored=JSON.parse(localStorage.getItem('sbg_gallery_quote_clicks')||'[]');
+      stored.push({...inquiry,created_at:new Date().toISOString()});
+      localStorage.setItem('sbg_gallery_quote_clicks',JSON.stringify(stored.slice(-50)));
+    }catch(error){}
+  }
 }
 function productShareMessage(product){
   return [
@@ -4174,9 +4186,6 @@ async function submitForm(){
     if(button){button.disabled=false;button.textContent='Send Enquiry via WhatsApp →'}
   }
 }</script>
-
-<!-- Vercel Speed Insights -->
-<script type="module" src="/js/speed-insights.js"></script>
 
 <script>
 if('serviceWorker' in navigator){
