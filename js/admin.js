@@ -527,27 +527,25 @@ function renderAdminGallery() {
       && (!filters.to || itemDate <= filters.to);
   });
   qs("#adminGallery").innerHTML = items.map(item => {
-    const media = (item.media || [])[0] || {};
     const mediaCount = (item.media || []).length;
-    const mediaHtml = secureMediaElement(media, item.title);
-    return `<article class="entry-card">
-      <button class="entry-media-button" type="button" data-preview-media="${item.id}" aria-label="Open preview for ${esc(item.title)}">
-        ${media.path || media.url ? mediaHtml : `<div class="empty-media"><i data-lucide="image"></i></div>`}
-        ${mediaCount ? `<em class="entry-media-count">${mediaCount} ${mediaCount === 1 ? "image" : "media"}</em>` : ""}
-        <span><i data-lucide="maximize-2"></i></span>
-      </button>
-      <div class="entry-card-content">
-        <span class="status-pill ${statusClass(item.status)}">${esc(item.status)}</span>
-        <h3>${esc(item.title)}</h3>
-        <p>${esc(item.category)} / ${esc(item.material || "Material TBC")} / Qty ${formatQuantity(productionQuantity(item))}</p>
+    return `<tr>
+      <td>${previewButton(item, "table-thumb")}${mediaCount > 1 ? `<em class="media-count-badge">${mediaCount}</em>` : ""}</td>
+      <td><strong>${esc(item.title)}</strong>${item.customer_name ? `<br><small>${esc(item.customer_name)}</small>` : ""}</td>
+      <td>${esc(item.category)}</td>
+      <td>${esc(item.material || "—")}</td>
+      <td>${formatQuantity(productionQuantity(item))}</td>
+      <td><span class="status-pill ${statusClass(item.status)}">${esc(item.status)}</span></td>
+      <td>${formatDate(item.production_date)}</td>
+      <td>${item.is_public ? "Yes" : "No"}</td>
+      <td>
         ${isFullAdmin() ? `<div class="entry-actions">
           <button class="btn btn-small btn-outline" data-edit="${item.id}"><i data-lucide="pencil"></i> Edit</button>
           <button class="btn btn-small btn-outline" data-toggle="${item.id}"><i data-lucide="${item.is_public ? "eye-off" : "eye"}"></i> ${item.is_public ? "Hide" : "Show"}</button>
           <button class="btn btn-small btn-outline danger" data-delete="${item.id}"><i data-lucide="trash-2"></i> Delete</button>
-        </div>` : `<p class="readonly-note">View only</p>`}
-      </div>
-    </article>`;
-  }).join("") || `<div class="panel">No entries found.</div>`;
+        </div>` : `<span class="readonly-note">View only</span>`}
+      </td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="9">No entries found.</td></tr>`;
   qsa("[data-edit]").forEach(btn => btn.addEventListener("click", () => editProduction(btn.dataset.edit)));
   qsa("[data-toggle]").forEach(btn => btn.addEventListener("click", () => togglePublic(btn.dataset.toggle)));
   qsa("[data-delete]").forEach(btn => btn.addEventListener("click", () => deleteProduction(btn.dataset.delete)));
@@ -582,8 +580,7 @@ function selectFiles(fileList, form) {
       return false;
     }
     return true;
-  }).slice(0, 8);
-  uploadedMedia = [];
+  }).slice(0, 20);
   renderSelectedMedia(form);
 }
 
@@ -646,7 +643,7 @@ async function saveProduction(event) {
   try {
     const existing = productions.find(item => item.id === values.id);
     const hasNewMedia = mediaForm === form && selectedMedia.length;
-    let media = mediaForm === form ? (hasNewMedia ? await uploadSelectedMedia(form) : uploadedMedia) : (existing?.media || []);
+    let media = mediaForm === form ? (hasNewMedia ? [...uploadedMedia, ...await uploadSelectedMedia(form)] : uploadedMedia) : (existing?.media || []);
     const material = values.material === "Others" ? values.material_other.trim() : values.material;
     const thickness = values.thickness === "Others" ? values.thickness_other.trim() : values.thickness;
     const quantity = Math.max(1, Number.parseInt(values.quantity, 10) || 1);
