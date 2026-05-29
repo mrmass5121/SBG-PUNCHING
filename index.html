@@ -71,30 +71,30 @@ button{cursor:pointer;border:none;background:none;font-family:var(--ff-body)}
   background:var(--bg);display:flex;
   align-items:center;justify-content:center;
   flex-direction:column;gap:24px;
-  transition:opacity .8s ease,visibility .8s ease;
+  transition:opacity .5s ease,visibility .5s ease;
 }
 #intro.hidden{opacity:0;visibility:hidden}
 .intro-logo-text{
   font-family:var(--ff-display);
   font-size:clamp(2.5rem,6vw,5rem);
   letter-spacing:.2em;color:var(--text);
-  opacity:0;animation:introFadeUp .8s .3s forwards;
+  opacity:0;animation:introFadeUp .5s .5s forwards;
 }
 .intro-logo-text span{color:var(--green)}
 .intro-tagline{
   font-family:var(--ff-mono);font-size:.7rem;
   letter-spacing:.4em;color:var(--steel);
-  opacity:0;animation:introFadeUp .8s .6s forwards;
+  opacity:0;animation:introFadeUp .5s .5s forwards;
 }
 .intro-bar{
   width:200px;height:2px;background:var(--border);
   overflow:hidden;border-radius:2px;
-  opacity:0;animation:introFadeUp .8s .7s forwards;
+  opacity:0;animation:introFadeUp .5s .5s forwards;
 }
 .intro-bar-fill{
   height:100%;width:0;background:var(--green);
   box-shadow:0 0 12px var(--green);
-  animation:introLoad 1.8s 0.8s cubic-bezier(.4,0,.2,1) forwards;
+  animation:introLoad 0.8s 0.8s cubic-bezier(.4,0,.2,1) forwards;
 }
 @keyframes introFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes introLoad{from{width:0}to{width:100%}}
@@ -2338,7 +2338,7 @@ footer{
         <span class="svc-tag">PROTOTYPE TO PRODUCTION</span>
         <span class="svc-more">Fabrication details →</span>
       </a>
-      <a class="svc-card reveal" href="/control-panel-enclosures/" style="transition-delay:.25s">
+      <a class="svc-card reveal" href="/control-panel-enclosures/" style="transition-delay:.15s">
         <div class="svc-number">05</div>
         <div class="svc-icon-wrap">
           <svg class="svc-icon" viewBox="0 0 28 28" fill="none" stroke="var(--green)" stroke-width="1.5">
@@ -2352,7 +2352,7 @@ footer{
         <span class="svc-tag">ELECTRICAL · AUTOMATION</span>
         <span class="svc-more">Enclosure details →</span>
       </a>
-      <a class="svc-card reveal" href="/ms-sheet-cutting/" style="transition-delay:.3s">
+      <a class="svc-card reveal" href="/ms-sheet-cutting/" style="transition-delay:.15s">
         <div class="svc-number">06</div>
         <div class="svc-icon-wrap">
           <svg class="svc-icon" viewBox="0 0 28 28" fill="none" stroke="var(--green)" stroke-width="1.5">
@@ -2758,7 +2758,7 @@ window.SBG_CONFIG=Object.assign({},window.SBG_CONFIG||{},{
 window.addEventListener('load',()=>{
   setTimeout(()=>{
     document.getElementById('intro').classList.add('hidden');
-  },800);
+  },250);
 });
 
 /* ─── HEADER SCROLL ─── */
