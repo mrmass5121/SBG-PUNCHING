@@ -1,0 +1,19 @@
+{
+  "name": "SBG Punching Production Showcase",
+  "short_name": "SBG Punching",
+  "description": "Premium industrial showcase with live production updates.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#070b10",
+  "theme_color": "#070b10",
+  "icons": [
+    {
+      "src": "assets/images/og-industrial.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

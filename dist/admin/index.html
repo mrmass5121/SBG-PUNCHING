@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#070b10">
+  <title>Admin Dashboard | SBG Punching</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin.css">
+<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+</head>
+<body class="admin-body">
+  <img class="admin-bg-video" src="../assets/videos/admin-storm-background.gif" alt="" aria-hidden="true">
+  <div class="admin-bg-overlay" aria-hidden="true"></div>
+  <div class="admin-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="admin-brand" href="index.html">
+        <span class="brand-mark">SBG</span>
+        <span><strong>SBG Punching</strong><small>Admin system</small></span>
+      </a>
+      <nav class="side-nav" aria-label="Admin navigation">
+        <button class="active" data-section="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</button>
+        <button data-section="daily"><i data-lucide="clipboard-list"></i> Daily Track</button>
+        <button data-section="marketing"><i data-lucide="upload-cloud"></i> Marketing Upload</button>
+        <button data-section="production"><i data-lucide="images"></i> Production Records</button>
+        <button data-section="services"><i data-lucide="megaphone"></i> Marketing Showcase</button>
+        <button data-section="inquiries"><i data-lucide="inbox"></i> Inquiries</button>
+        <button data-section="reviews"><i data-lucide="star"></i> Reviews</button>
+      </nav>
+      <button class="logout-btn" id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
+    </aside>
+
+    <main class="admin-main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="adminMenu" aria-label="Open sidebar"><i data-lucide="menu"></i></button>
+        <div><p class="eyebrow">Live admin console</p><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="topbar-actions">
+          <span class="status-chip"><i data-lucide="activity"></i> Live Sync</span>
+          <span id="adminEmail">Checking session...</span>
+          <a class="icon-btn" href="../index.html" aria-label="Open site"><i data-lucide="external-link"></i></a>
+        </div>
+      </header>
+
+      <section class="admin-section active" id="section-dashboard">
+        <div class="pulse-panel">
+          <div><p class="eyebrow"><span class="live-dot"></span> Production telemetry</p><h2>SBG live control room.</h2><p id="dashboardSummary">Loading live records.</p></div>
+          <div class="completion-ring" id="completionRing"><strong id="completionRate">0%</strong><span>completed</span></div>
+        </div>
+        <div class="stat-grid" id="adminStats"></div>
+        <div class="command-grid">
+          <button class="command-card" data-jump="daily"><i data-lucide="clipboard-plus"></i><span><strong>Daily Record</strong><small>Track shop-floor production with private media.</small></span></button>
+          <button class="command-card" data-jump="marketing"><i data-lucide="radio-tower"></i><span><strong>Marketing Post</strong><small>Publish public gallery work for customers.</small></span></button>
+          <button class="command-card" data-jump="production"><i data-lucide="search-check"></i><span><strong>Find Records</strong><small>Search, filter, preview, edit, and publish.</small></span></button>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Recent production</h3><button class="btn btn-small" data-jump="daily"><i data-lucide="plus"></i> Add Daily</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Preview</th><th>Job</th><th>Category</th><th>Quantity</th><th>Status</th><th>Date</th><th>Public</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="section-production">
+        <div class="panel">
+          <div class="panel-head"><h3>Production records</h3><input id="adminSearch" type="search" placeholder="Search production"></div>
+          <div class="filter-bar" id="recordFilters">
+            <label>Category<select id="filterCategory"><option value="all">All categories</option></select></label>
+            <label>Status<select id="filterStatus"><option value="all">All status</option></select></label>
+            <label>Visibility<select id="filterVisibility"><option value="all">All records</option><option value="public">Public gallery</option><option value="private">Daily/private</option></select></label>
+            <label>Media<select id="filterMedia"><option value="all">With or without media</option><option value="with">With media</option><option value="without">Without media</option></select></label>
+            <label>From<input id="filterFrom" type="date"></label>
+            <label>To<input id="filterTo" type="date"></label>
+            <button class="btn btn-small btn-outline" id="clearFilters" type="button"><i data-lucide="x"></i> Clear</button>
+          </div>
+          <div class="admin-gallery" id="adminGallery"></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="section-daily">
+        <form class="panel admin-form" id="dailyForm" data-entry-mode="daily">
+          <div class="panel-head"><h3>Daily production track record</h3><button class="btn btn-small" type="reset"><i data-lucide="rotate-ccw"></i> Reset</button></div>
+          <input type="hidden" name="id">
+          <div class="form-grid">
+            <label>Title<input name="title" required maxlength="140" placeholder="Laser cut bracket batch"></label>
+            <label>Customer<input name="customer_name" maxlength="140" placeholder="Client or project name"></label>
+            <label>Category<select name="category" required>
+              <option>CNC Punching</option>
+              <option>Laser Cutting</option>
+              <option>Sheet Bending</option>
+              <option>Fabrication</option>
+              <option>Assembly</option>
+            </select></label>
+
+            <label>Material<select name="material" required data-other-toggle="material_other">
+              <option>Mild Steel (MS)</option>
+              <option>Stainless Steel (SS)</option>
+              <option>Aluminium</option>
+              <option>Galvanised Iron (GI)</option>
+              <option>Cold Rolled Steel (CR)</option>
+              <option>Cold Rolled Close Annealed (CRCA)</option>
+              <option>Hot Rolled (HR)</option>
+              <option> Hot Rolled Pickled and Oiled steel (HRPO)</option>
+              <option>Copper</option>
+              <option>Others</option>
+            </select></label>
+            <label class="conditional-field" data-other-field="material_other">Specify Material<input type="text" name="material_other" placeholder="Enter material name"></label>
+
+            <label>Thickness<select name="thickness" required data-other-toggle="thickness_other">
+              <option>0.5 mm</option>
+              <option>1 mm</option>
+              <option>1.5 mm</option>
+              <option>2 mm</option>
+              <option>2.5 mm</option>
+              <option>3 mm</option>
+              <option>4 mm</option>
+              <option>5 mm</option>
+              <option>6 mm</option>
+              <option>8 mm</option>
+              <option>10 mm</option>
+              <option>12 mm</option>
+              <option>15 mm</option>
+              <option>20 mm</option>
+              <option>25 mm</option>
+              <option>Others</option>
+            </select></label>
+            <label class="conditional-field" data-other-field="thickness_other">Specify Thickness<input type="text" name="thickness_other" placeholder="Enter thickness"></label>
+            
+            <label>Status<select name="status" required>
+              <option>Queued</option>
+              <option>In Progress</option>
+              <option>Completed</option>
+              <option>On Hold</option>
+              <option>Cancelled</option>
+            </select></label>
+            <label>Quantity<input name="quantity" type="number" min="1" step="1" inputmode="numeric" value="1" required></label>
+            <label>Date<input name="production_date" type="date" required></label>
+          </div>
+          <label>Description<textarea name="description" rows="4" required maxlength="900" placeholder="Production notes, quality checks, finish details"></textarea></label>
+          <label>Tags<input name="tags" placeholder="panel, perforation, urgent"></label>
+          <input type="hidden" name="is_public" value="off">
+          <input type="hidden" name="featured" value="off">
+          <div class="drop-zone" data-media-zone>
+            <input type="file" accept="image/*,video/mp4,video/webm" multiple hidden data-media-input>
+            <button class="btn btn-outline" type="button" data-pick-media><i data-lucide="image-plus"></i> Choose Media</button>
+            <p>Attach daily job photos or videos. These stay private unless the record is made public later.</p>
+            <div class="progress"><span data-upload-progress></span></div>
+            <div class="media-preview" data-media-preview></div>
+          </div>
+          <button class="btn" type="submit"><i data-lucide="save"></i> Save Daily Record</button>
+          <p class="form-status" id="dailyStatus" role="status"></p>
+        </form>
+      </section>
+
+      <section class="admin-section" id="section-marketing">
+        <form class="panel admin-form" id="marketingForm" data-entry-mode="marketing">
+          <div class="panel-head"><h3>Marketing gallery upload</h3><button class="btn btn-small" type="reset"><i data-lucide="rotate-ccw"></i> Reset</button></div>
+          <input type="hidden" name="id">
+          <div class="form-grid">
+            <label>Title<input name="title" required maxlength="140" placeholder="Finished control panel batch"></label>
+            <label>Customer<input name="customer_name" maxlength="140" placeholder="Client or project name"></label>
+            <label>Category<select name="category" required>
+              <option>CNC Punching</option>
+              <option>Laser Cutting</option>
+              <option>Sheet Bending</option>
+              <option>Fabrication</option>
+              <option>Assembly</option>
+            </select></label>
+
+            <label>Material<select name="material" required data-other-toggle="marketing_material_other">
+              <option>Mild Steel (MS)</option>
+              <option>Stainless Steel (SS)</option>
+              <option>Aluminium</option>
+              <option>Galvanised Iron (GI)</option>
+              <option>Cold Rolled Steel (CR)</option>
+              <option>Cold Rolled Close Annealed (CRCA)</option>
+              <option>Hot Rolled (HR)</option>
+              <option> Hot Rolled Pickled and Oiled steel (HRPO)</option>
+              <option>Copper</option>
+              <option>Others</option>
+            </select></label>
+            <label class="conditional-field" data-other-field="marketing_material_other">Specify Material<input type="text" name="material_other" placeholder="Enter material name"></label>
+
+            <label>Thickness<select name="thickness" required data-other-toggle="marketing_thickness_other">
+              <option>0.5 mm</option>
+              <option>1 mm</option>
+              <option>1.5 mm</option>
+              <option>2 mm</option>
+              <option>2.5 mm</option>
+              <option>3 mm</option>
+              <option>4 mm</option>
+              <option>5 mm</option>
+              <option>6 mm</option>
+              <option>8 mm</option>
+              <option>10 mm</option>
+              <option>12 mm</option>
+              <option>15 mm</option>
+              <option>20 mm</option>
+              <option>25 mm</option>
+              <option>Others</option>
+            </select></label>
+            <label class="conditional-field" data-other-field="marketing_thickness_other">Specify Thickness<input type="text" name="thickness_other" placeholder="Enter thickness"></label>
+
+            <label>Status<select name="status" required>
+              <option>Completed</option>
+              <option>In Progress</option>
+              <option>Queued</option>
+              <option>On Hold</option>
+              <option>Cancelled</option>
+            </select></label>
+            <label>Quantity<input name="quantity" type="number" min="1" step="1" inputmode="numeric" value="1" required></label>
+            <label>Date<input name="production_date" type="date" required></label>
+          </div>
+          <label>Description<textarea name="description" rows="4" required maxlength="900" placeholder="Customer-facing gallery description"></textarea></label>
+          <label>Tags<input name="tags" placeholder="control panel, laser cut, enclosure"></label>
+          <div class="toggle-row">
+            <label><input type="checkbox" name="is_public" checked> Public gallery (Collections)</label>
+            <label><input type="checkbox" name="featured"> Featured project</label>
+          </div>
+          <div class="drop-zone" data-media-zone>
+            <input type="file" accept="image/*,video/mp4,video/webm" multiple hidden data-media-input>
+            <button class="btn btn-outline" type="button" data-pick-media><i data-lucide="image-plus"></i> Choose Media</button>
+            <p>Drop images or videos here. Executable files are rejected.</p>
+            <div class="progress"><span data-upload-progress></span></div>
+            <div class="media-preview" data-media-preview></div>
+          </div>
+          <button class="btn" type="submit"><i data-lucide="radio-tower"></i> Publish Marketing Entry</button>
+          <p class="form-status" id="marketingStatus" role="status"></p>
+        </form>
+      </section>
+
+      <section class="admin-section" id="section-services">
+        <div class="panel">
+          <div class="panel-head"><h3>Marketing showcase notes</h3></div>
+          <form class="admin-form compact-form" id="serviceForm">
+            <input name="title" placeholder="Service or project title" required maxlength="140">
+            <input name="category" placeholder="Category" required maxlength="80">
+            <textarea name="description" rows="3" placeholder="Description" required maxlength="700"></textarea>
+            <button class="btn" type="submit"><i data-lucide="plus"></i> Save Service Note</button>
+          </form>
+          <div class="table-wrap service-table-wrap">
+            <table class="service-table">
+              <thead><tr><th>Preview</th><th>Showcase</th><th>Category</th><th>Description</th><th>Action</th></tr></thead>
+              <tbody id="serviceList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="section-inquiries">
+        <div class="panel">
+          <div class="panel-head"><h3>Client inquiries</h3><button class="btn btn-small" id="refreshInquiries"><i data-lucide="refresh-cw"></i> Refresh</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Preview</th><th>Contact</th><th>Service</th><th>Message</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="inquiryRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="section-reviews">
+        <div class="panel">
+          <div class="panel-head"><h3>Customer reviews</h3><button class="btn btn-small" id="refreshReviews"><i data-lucide="refresh-cw"></i> Refresh</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Preview</th><th>Product</th><th>Customer</th><th>Rating</th><th>Review</th><th>Status</th><th>Action</th></tr></thead><tbody id="reviewRows"></tbody></table></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <div class="loading" id="loading"><span></span> Loading</div>
+  <div class="media-lightbox" id="mediaLightbox" aria-hidden="true">
+    <button class="icon-btn lightbox-close" type="button" id="lightboxClose" aria-label="Close preview"><i data-lucide="x"></i></button>
+    <button class="icon-btn lightbox-nav lightbox-prev" type="button" id="lightboxPrev" data-lightbox-nav aria-label="Previous media"><i data-lucide="chevron-left"></i></button>
+    <div class="lightbox-stage" id="lightboxStage"></div>
+    <button class="icon-btn lightbox-nav lightbox-next" type="button" id="lightboxNext" data-lightbox-nav aria-label="Next media"><i data-lucide="chevron-right"></i></button>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="../js/config.js"></script>
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

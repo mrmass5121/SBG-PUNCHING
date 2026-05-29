@@ -1,0 +1,8 @@
+name = "sbg-punching"
+compatibility_date = "2026-05-26"
+pages_build_output_dir = "."
+
+# Add secrets with:
+# wrangler pages secret put SUPABASE_URL
+# wrangler pages secret put SUPABASE_SERVICE_ROLE_KEY
+# wrangler pages secret put TURNSTILE_SECRET_KEY

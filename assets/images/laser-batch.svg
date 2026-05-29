@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-label="Laser cut metal bracket batch">
+  <rect width="900" height="620" fill="#081018"/>
+  <g transform="translate(105 120) skewX(-14)" fill="#1c2934" stroke="#70808b" stroke-width="4">
+    <rect x="0" y="0" width="560" height="340" rx="8"/>
+    <path d="M70 76h160v72H70zM285 76h160v72H285zM70 206h160v72H70zM285 206h160v72H285z" fill="#0b1219"/>
+  </g>
+  <path d="M610 70 450 282" stroke="#ffb020" stroke-width="6"/>
+  <path d="M630 74 470 286" stroke="#00d26a" stroke-width="2"/>
+  <g stroke="#25b7e8" opacity=".48"><path d="M680 90 820 20"/><path d="M690 124 870 122"/><path d="M664 152 835 250"/></g>
+</svg>

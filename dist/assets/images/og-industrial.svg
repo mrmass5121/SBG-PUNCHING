@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#070b10"/>
+  <path d="M70 440 790 130l250 178-720 312z" fill="#17232e" stroke="#00d26a" stroke-width="5"/>
+  <text x="76" y="150" fill="#f2f6f8" font-family="Arial Black,Arial" font-size="86">SBG PUNCHING</text>
+  <text x="82" y="220" fill="#a7b3be" font-family="Arial" font-size="34">Precision manufacturing showcase</text>
+  <path d="M860 170 1060 320" stroke="#ffb020" stroke-width="10"/>
+</svg>

@@ -1,0 +1,11 @@
+{
+  "name": "sbg-punching",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-vercel.js"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

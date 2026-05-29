@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-label="Fabricated electrical enclosure">
+  <rect width="900" height="620" fill="#071018"/>
+  <path d="M210 154h360l110 92v270H300l-90-86z" fill="#16232d" stroke="#6f7d87" stroke-width="4"/>
+  <path d="M300 244h380M300 244v272M210 154l90 90M570 154l110 92" fill="none" stroke="#90a0aa" stroke-width="3" opacity=".55"/>
+  <rect x="360" y="300" width="190" height="112" rx="8" fill="#0b1118" stroke="#00d26a" stroke-width="4"/>
+  <path d="M400 342h110M400 374h72" stroke="#ffb020" stroke-width="7"/>
+  <circle cx="610" cy="346" r="16" fill="#25b7e8"/>
+</svg>
