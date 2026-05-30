@@ -373,19 +373,7 @@ label {
     repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 1px, transparent 1px 18px);
   box-shadow: 18px 0 70px rgba(0,0,0,.22);
 }
-.admin-brand { display: flex; align-items: center; gap: 12px; padding: 8px; min-height: 58px; }
-.admin-brand-logo {
-  display: block;
-  width: 178px;
-  height: auto;
-  max-height: 42px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 10px rgba(0,210,106,.08));
-}
-@media (max-width: 520px) {
-  .admin-brand-logo { width: 146px; max-height: 36px; }
-}
-
+.admin-brand { display: flex; align-items: center; gap: 12px; padding: 8px; }
 .admin-brand strong { display: block; font-family: var(--display); font-size: 1.3rem; line-height: 1; }
 .admin-brand small { color: var(--steel); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
 .side-nav { display: grid; gap: 5px; }
@@ -988,5 +976,3 @@ td { color: var(--muted); }
   color: var(--muted);
   font-size: .75rem;
 }
-
-.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
