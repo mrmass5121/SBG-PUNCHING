@@ -373,9 +373,25 @@ label {
     repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 1px, transparent 1px 18px);
   box-shadow: 18px 0 70px rgba(0,0,0,.22);
 }
-.admin-brand { display: flex; align-items: center; gap: 12px; padding: 8px; }
-.admin-brand strong { display: block; font-family: var(--display); font-size: 1.3rem; line-height: 1; }
-.admin-brand small { color: var(--steel); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+.admin-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 8px 6px;
+  overflow: hidden;
+}
+.admin-brand-logo {
+  display: block;
+  width: min(214px, 100%);
+  max-width: 100%;
+  height: auto;
+  max-height: 50px;
+  object-fit: contain;
+  object-position: left center;
+  flex: 0 1 auto;
+}
 .side-nav { display: grid; gap: 5px; }
 .side-nav button, .logout-btn {
   position: relative;
@@ -976,3 +992,8 @@ td { color: var(--muted); }
   color: var(--muted);
   font-size: .75rem;
 }
+
+
+/* Admin logo hard guard: keeps the real image inside the left sidebar. */
+.sidebar .admin-brand { justify-content: center; overflow: hidden; }
+.sidebar .admin-brand-logo { width: min(214px, 100%) !important; height: auto !important; max-height: 50px !important; object-fit: contain !important; }
