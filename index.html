@@ -3619,14 +3619,21 @@ function quoteClickInquiry(product){
   };
 }
 function logQuoteClick(product){
-  if(!product||!sbgClient)return;
+  if(!product)return;
   const key=`sbg_quote_click_${productSlug(product)}`;
   const last=Number(sessionStorage.getItem(key)||0);
   if(Date.now()-last<3000)return;
   sessionStorage.setItem(key,String(Date.now()));
-  sbgClient.from('inquiries').insert(quoteClickInquiry(product)).then(({error})=>{
-    if(error)console.warn('Quote click inquiry log failed:',error.message||error);
-  });
+  const payload=quoteClickInquiry(product);
+  if(turnstileEnabled()){
+    postJson(serverlessEndpoint('submit-inquiry'),payload).catch(err=>
+      console.warn('Quote click inquiry log failed (serverless):',err?.message||err)
+    );
+  }else if(sbgClient){
+    sbgClient.from('inquiries').insert(payload).then(({error})=>{
+      if(error)console.warn('Quote click inquiry log failed:',error.message||error);
+    });
+  }
 }
 function productShareMessage(product){
   return [
@@ -4218,6 +4225,9 @@ function updateLightbox(){
       event.preventDefault();
       openRelated();
     });
+  });
+  document.querySelectorAll('#productDetail .product-quote-action').forEach(link=>{
+    link.addEventListener('click',()=>logQuoteClick(lbProducts[lbIndex]));
   });
 }
 document.addEventListener('keydown',e=>{
