@@ -3143,7 +3143,7 @@ function mapProduction(row){
 
 // Public reads are protected by Supabase RLS. If config is not set, the
 // gallery stays empty until real production records are available.
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 let galleryPage = 0;
 let galleryHasMore = true;
 async function loadProducts(){
