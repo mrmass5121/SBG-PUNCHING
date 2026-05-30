@@ -2022,6 +2022,38 @@ footer{
   .amazon-recommended-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:600px){
+  .production-card-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+  #production .amazon-card-image,
+  #production .amazon-rec-card .amazon-card-image{
+    height:140px;
+  }
+  #production .amazon-product-title{
+    font-size:.9rem;
+    margin:8px 0 4px;
+  }
+  #production .amazon-rec-card > :not(.amazon-card-media){
+    margin-left:10px;
+    margin-right:10px;
+  }
+  #production .amazon-quote{
+    font-size:.5rem;
+    letter-spacing:.1em;
+  }
+  #production .amazon-stars{
+    font-size:.62rem;
+  }
+  .product-card-actions{
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .product-card-action,
+  .product-review-cta{
+    font-size:.65rem;
+    padding:5px 8px;
+  }
   .services-grid,.why-grid,.industries-grid,.products-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
