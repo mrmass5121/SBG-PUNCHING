@@ -2562,6 +2562,20 @@ footer{
     <div id="productionGalleryShell">
       <div id="wishlistShelf" class="wishlist-shelf" hidden></div>
       <div id="recommendedGallery" class="production-card-grid"></div>
+      <!-- LOAD MORE BUTTON -->
+      <div style="text-align:center; margin-top:48px;">
+        <button
+          id="loadMoreBtn"
+          onclick="loadMoreProducts()"
+          style="display:none; padding:13px 40px; background:transparent;
+                 border:1.5px solid var(--border-green); border-radius:8px;
+                 font-size:.92rem; font-weight:600; color:var(--green);
+                 cursor:pointer; letter-spacing:.05em; transition:all .25s;"
+          onmouseover="this.style.background='rgba(0,200,83,.1)'"
+          onmouseout="this.style.background='transparent'">
+          Load More
+        </button>
+      </div>
     </div>
     <div id="productionDetailView" class="production-detail-view" hidden></div>
   </div>
@@ -3129,7 +3143,15 @@ function mapProduction(row){
 
 // Public reads are protected by Supabase RLS. If config is not set, the
 // gallery stays empty until real production records are available.
+const PAGE_SIZE = 12;
+let galleryPage = 0;
+let galleryHasMore = true;
 async function loadProducts(){
+  // Reset to page 0 on fresh load
+  galleryPage = 0;
+  galleryHasMore = true;
+  products = [];
+
   try{
     if(sbgClient){
       let {data,error}=await sbgClient
@@ -3137,23 +3159,28 @@ async function loadProducts(){
         .select('id,title,category,material,thickness,quantity,status,description,tags,media,production_date,created_at,is_public,featured')
         .eq('is_public',true)
         .order('production_date',{ascending:false})
-        .order('created_at',{ascending:false});
+        .order('created_at',{ascending:false})
+        .range(0, PAGE_SIZE - 1);  // ← ONLY FETCH FIRST 12
       if(error&&(missingQuantityColumn(error)||missingProductionColumn(error,'featured'))){
         ({data,error}=await sbgClient
           .from('productions')
           .select('id,title,category,material,thickness,status,description,tags,media,production_date,created_at,is_public')
           .eq('is_public',true)
           .order('production_date',{ascending:false})
-          .order('created_at',{ascending:false}));
+          .order('created_at',{ascending:false})
+          .range(0, PAGE_SIZE - 1));  // ← ONLY FETCH FIRST 12
       }
       if(error)throw error;
-      products=(data||[]).filter(row=>!REMOVED_PRODUCTION_IDS.has(row.id)).map(mapProduction);
+      const fetched=(data||[]).filter(row=>!REMOVED_PRODUCTION_IDS.has(row.id)).map(mapProduction);
+      products=fetched;
+      // If we got fewer than PAGE_SIZE, no more pages exist
+      if(fetched.length < PAGE_SIZE) galleryHasMore=false;
     }else{
       const res=await fetch('/products.json',{cache:'no-store'});
       if(res.ok){
         const data=await res.json();
         if(data&&data.products&&data.products.length){
-          products=data.products.map(p=>({
+          products=data.products.slice(0, PAGE_SIZE).map(p=>({
             id:p.id||p.title,
             cat:p.category||'Production',
             name:p.title||'Production Item',
@@ -3171,6 +3198,7 @@ async function loadProducts(){
             images:Array.isArray(p.images)?p.images.map(src=>({src:safeUrl(src),type:'image',alt:p.title||'Production item'})).filter(item=>item.src):[],
             date:p.date||null
           }));
+          if(data.products.length <= PAGE_SIZE) galleryHasMore=false;
         }
       }
     }
@@ -3179,9 +3207,59 @@ async function loadProducts(){
   }
   await loadReviews();
   renderProducts(currentFilter);
+  updateLoadMoreButton();  // ← show/hide the button
   openProductFromRoute();
 }
 
+// ── NEW FUNCTION: loads the next batch when user clicks "Load More" ──
+async function loadMoreProducts(){
+  if(!galleryHasMore) return;
+  galleryPage++;
+  const from = galleryPage * PAGE_SIZE;
+  const to   = from + PAGE_SIZE - 1;
+
+  const btn = document.getElementById('loadMoreBtn');
+  if(btn){ btn.disabled=true; btn.textContent='Loading...'; }
+
+  try{
+    if(sbgClient){
+      let {data,error}=await sbgClient
+        .from('productions')
+        .select('id,title,category,material,thickness,quantity,status,description,tags,media,production_date,created_at,is_public,featured')
+        .eq('is_public',true)
+        .order('production_date',{ascending:false})
+        .order('created_at',{ascending:false})
+        .range(from, to);
+      if(error&&(missingQuantityColumn(error)||missingProductionColumn(error,'featured'))){
+        ({data,error}=await sbgClient
+          .from('productions')
+          .select('id,title,category,material,thickness,status,description,tags,media,production_date,created_at,is_public')
+          .eq('is_public',true)
+          .order('production_date',{ascending:false})
+          .order('created_at',{ascending:false})
+          .range(from, to));
+      }
+      if(error)throw error;
+      const newItems=(data||[]).filter(row=>!REMOVED_PRODUCTION_IDS.has(row.id)).map(mapProduction);
+      if(newItems.length < PAGE_SIZE) galleryHasMore=false;
+      products=[...products, ...newItems];
+    }
+  }catch(error){
+    console.warn('Load more failed:',error.message||error);
+  }
+
+  renderProducts(currentFilter);
+  updateLoadMoreButton();
+}
+
+// ── Shows or hides the Load More button based on whether more items exist ──
+function updateLoadMoreButton(){
+  const btn=document.getElementById('loadMoreBtn');
+  if(!btn) return;
+  btn.style.display = galleryHasMore ? 'inline-block' : 'none';
+  btn.disabled = false;
+  btn.textContent = 'Load More';
+}
 function registerProductRealtime(){
   if(!sbgClient)return;
   sbgClient.channel('homepage-production-feed')
