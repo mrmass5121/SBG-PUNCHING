@@ -930,18 +930,26 @@ function renderServices() {
 }
 
 function renderInquiries() {
-  const fallbackMedia = productions.find(row => (row.media || []).length);
   qs("#inquiryRows").innerHTML = inquiries.map(item => {
-    const isQuoteClick = item.source === "quote-click";
+    const isGalleryQuote = item.source === "gallery-quote-click" || item.source === "quote-click";
     const contactMeta = [
       item.company_name,
-      isQuoteClick ? "Phone not collected" : item.phone,
+      isGalleryQuote ? "Phone not collected" : item.phone,
       item.email
     ].filter(Boolean).map(esc).join("<br>");
+
+    // Show image only for gallery quote clicks that have an image_url; nothing for contact form inquiries
+    let previewCell;
+    if (isGalleryQuote && item.image_url) {
+      previewCell = `<button class="table-thumb" type="button" onclick="window.open('${esc(item.image_url)}','_blank','noopener')" aria-label="View product image"><img src="${esc(item.image_url)}" alt="${esc(item.service || 'Product')}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></button>`;
+    } else {
+      previewCell = `<span class="table-thumb empty"><i data-lucide="image-off"></i></span>`;
+    }
+
     return `
     <tr>
-      <td>${fallbackMedia ? previewButton(fallbackMedia, "table-thumb") : `<span class="table-thumb empty"><i data-lucide="image-off"></i></span>`}</td>
-      <td><strong>${esc(item.contact_name)}</strong>${isQuoteClick ? `<br><span class="status-pill queued">Product quote click</span>` : ""}${contactMeta ? `<br>${contactMeta}` : ""}</td>
+      <td>${previewCell}</td>
+      <td><strong>${esc(item.contact_name)}</strong>${isGalleryQuote ? `<br><span class="status-pill queued">Product quote click</span>` : ""}${contactMeta ? `<br>${contactMeta}` : ""}</td>
       <td>${esc(item.service)}</td>
       <td>${esc(item.message)}</td>
       <td>${formatDate(item.created_at || item.updated_at)}</td>
