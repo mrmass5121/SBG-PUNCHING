@@ -24,7 +24,12 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style"
+  href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</noscript>
 <style>
 /* ═══════════════════════════════════════
    RESET & BASE
@@ -2797,7 +2802,7 @@ window.SBG_CONFIG=Object.assign({},window.SBG_CONFIG||{},{
   serverlessBaseUrl:(window.SBG_CONFIG&&window.SBG_CONFIG.serverlessBaseUrl)||'/api'
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script>
 
 /* ─── INTRO ─── */
@@ -3378,7 +3383,7 @@ function productDealCard(product,index){
   const name=escHTML(product.name||'Production Item');
   const mat=escHTML(product.mat||product.material||'Custom material');
   return `<article class="amazon-product-card amazon-deal-card" data-product-index="${productIndex}" role="button" tabindex="0" aria-label="View ${name}">
-    <div class="amazon-card-image">${image?`<img src="${image}" alt="${name}" loading="lazy">`:escHTML(product.icon||'⚙️')}</div>
+    <div class="amazon-card-image">${image?`<img src="${image}" alt="${name}" loading="lazy" width="400" height="210" style="width:100%;height:100%;object-fit:cover;">`:escHTML(product.icon||'⚙️')}</div>
     <a class="amazon-product-title" href="#production" data-product-link>${name}</a>
     <span class="amazon-deal-badge">${dealPercent(index)}% off</span><span class="amazon-deal-label">Limited time capacity</span>
     <span class="amazon-quote">Custom quote</span>
@@ -3396,7 +3401,7 @@ function productRecommendedCard(product,index){
   const saved=isWishlisted(product);
   return `<article class="amazon-product-card amazon-rec-card" data-product-index="${productIndex}" role="button" tabindex="0" aria-label="View ${name}">
     <div class="amazon-card-media">
-      <a class="amazon-card-image" href="#production" data-product-link aria-label="Open details for ${name}">${image?`<img src="${image}" alt="${name}" loading="lazy">`:escHTML(product.icon||'⚙️')}</a>
+      <a class="amazon-card-image" href="#production" data-product-link aria-label="Open details for ${name}">${image?`<img src="${image}" alt="${name}" loading="lazy" width="400" height="210" style="width:100%;height:100%;object-fit:cover;">`:escHTML(product.icon||'⚙️')}</a>
       <button class="product-full-view" type="button" data-full-view="${productIndex}" aria-label="Full view ${name}" title="Full view">${fullViewIcon()}</button>
     </div>
     <span class="amazon-quote">Quote after drawing review</span>
@@ -3696,7 +3701,7 @@ function renderWishlistShelf(forceVisible=false){
         const image=productImage(product);
         const name=escHTML(product.name||'Production Item');
         return `<article class="wishlist-item" data-product-index="${index}" role="button" tabindex="0" aria-label="Open ${name}">
-          ${image?`<img src="${image}" alt="${name}" loading="lazy">`:`<div class="wishlist-thumb">${escHTML(product.icon||'⚙️')}</div>`}
+          ${image?`<img src="${image}" alt="${name}" loading="lazy" width="400" height="210" style="width:100%;height:100%;object-fit:cover;">`:`<div class="wishlist-thumb">${escHTML(product.icon||'⚙️')}</div>`}
           <strong>${name}</strong>
           <small>${escHTML(product.cat||'Production')}</small>
           <div class="product-card-actions">
