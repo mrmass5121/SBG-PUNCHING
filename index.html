@@ -26,11 +26,12 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=block">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=block" fetchpriority="high">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=block" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=block"></noscript>
 <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="css/style.css"></noscript>
-<link rel="preload" as="image" href="img/sbg-logo.png" fetchpriority="high" type="image/webp">
+<link rel="preload" as="image" href="img/sbg-logo.png" fetchpriority="high" type="image/png">
 <style>
 /* ═══════════════════════════════════════
    RESET & BASE
@@ -2958,16 +2959,75 @@ footer{
   <a href="#contact" class="mob-cta-btn mob-cta-quote">Get Quote</a>
 </div>
 
-<script src="/js/config.js"></script>
 <script>
+/* LIGHTHOUSE 95+ PATCH: first-paint boot. Keeps above-the-fold UI available,
+   then loads config, Supabase and gallery/review code after the first paint. */
+(function(){
+  const byId=id=>document.getElementById(id);
+  byId('intro')?.classList.add('hidden');
+
+  const header=byId('mainHeader');
+  const syncHeader=()=>header?.classList.toggle('scrolled',window.scrollY>60);
+  syncHeader();
+  window.addEventListener('scroll',syncHeader,{passive:true});
+
+  window.openMobileMenu=function(){
+    byId('mobileMenu')?.classList.add('open');
+    byId('mobileOverlay')?.classList.add('open');
+  };
+  window.closeMobileMenu=function(){
+    byId('mobileMenu')?.classList.remove('open');
+    byId('mobileOverlay')?.classList.remove('open');
+  };
+
+  function loadScript(src){
+    return new Promise(resolve=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.defer=true;
+      s.onload=s.onerror=resolve;
+      document.head.appendChild(s);
+    });
+  }
+  function runInline(id){
+    const node=byId(id);
+    if(!node)return;
+    const s=document.createElement('script');
+    s.text=node.textContent;
+    document.body.appendChild(s);
+    node.remove();
+  }
+  async function startDeferredApp(){
+    if(window.__sbgDeferredAppStarted)return;
+    window.__sbgDeferredAppStarted=true;
+    await loadScript('/js/config.js');
+    runInline('sbg-config-inline');
+    await loadScript('/js/supabase.min.js');
+    runInline('sbg-app-inline');
+  }
+  function afterFirstPaint(){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if('requestIdleCallback' in window){
+        requestIdleCallback(startDeferredApp,{timeout:1600});
+      }else{
+        setTimeout(startDeferredApp,450);
+      }
+    }));
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',afterFirstPaint,{once:true});
+  }else{
+    afterFirstPaint();
+  }
+})();
+</script>
+<script type="text/plain" id="sbg-config-inline">
 window.SBG_CONFIG=Object.assign({},window.SBG_CONFIG||{},{
   turnstileSiteKey:(window.SBG_CONFIG&&window.SBG_CONFIG.turnstileSiteKey)||'0x4AAAAAADXr0G5pEekR28oa',
   serverlessBaseUrl:(window.SBG_CONFIG&&window.SBG_CONFIG.serverlessBaseUrl)||'/api'
 });
 </script>
-<script src="/js/supabase.min.js"></script>
-<script>
-
+<script type="text/plain" id="sbg-app-inline">
 /* ─── INTRO ───
    Disabled for faster first paint. The splash remains hidden through CSS. */
 document.getElementById('intro')?.classList.add('hidden');
@@ -2976,7 +3036,7 @@ document.getElementById('intro')?.classList.add('hidden');
 const header=document.getElementById('mainHeader');
 window.addEventListener('scroll',()=>{
   header.classList.toggle('scrolled',window.scrollY>60);
-});
+},{passive:true});
 
 /* ─── MOBILE MENU ─── */
 function openMobileMenu(){
@@ -4474,7 +4534,8 @@ async function submitForm(){
   }finally{
     if(button){button.disabled=false;button.textContent='Send Enquiry via WhatsApp →'}
   }
-}</script>
+}
+</script>
 
 <!-- Vercel Speed Insights -->
 <script>
@@ -4488,7 +4549,16 @@ window.addEventListener('load',()=>{
 },{once:true});
 </script>
 
-<script type="module" src="/js/speed-insights.js"></script>
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const s=document.createElement('script');
+    s.type='module';
+    s.src='/js/speed-insights.js';
+    document.head.appendChild(s);
+  },1600);
+},{once:true});
+</script>
 
 <script>
 if('serviceWorker' in navigator){
