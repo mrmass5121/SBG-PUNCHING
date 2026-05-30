@@ -28,7 +28,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
 href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=block">
-<link rel="stylesheet" href="css/style.css">
+<link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="css/style.css"></noscript>
+<link rel="preload" as="image" href="img/inline-1.webp" fetchpriority="high" type="image/webp">
 <style>
 /* ═══════════════════════════════════════
    RESET & BASE
@@ -2219,8 +2221,27 @@ footer{
   }
 }
 
+/* ─── BELOW-FOLD RENDER PATCH ───
+   Keeps the same visual output, but lets Chromium skip work for sections
+   that are not near the viewport during first load. */
+@supports (content-visibility:auto){
+  .clients-section,
+  .about-section,
+  .cap-section,
+  .process-section,
+  .why-section,
+  .industries-section,
+  .machines-section,
+  .gallery-section,
+  #production,
+  #contact,
+  footer{
+    content-visibility:auto;
+    contain-intrinsic-size:1px 720px;
+  }
+}
+
 </style>
-<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 <body>
 
@@ -2258,7 +2279,7 @@ footer{
         <span></span><span></span><span></span>
       </button>
       <a href="#" class="logo">
-        <img class="sbg-logo-img" data-logo-fallback="S.B.G. GROUPS" src="img/inline-1.webp" width="807" height="175" loading="eager" decoding="async" fetchpriority="high" alt="SBG Groups Logo" style="height:44px;width:auto;display:block;">
+        <img class="sbg-logo-img" src="img/inline-1.webp" width="807" height="175" loading="eager" decoding="async" fetchpriority="high" alt="SBG Groups Logo" style="height:44px;width:auto;display:block;">
       </a>
     </div>
     <nav>
@@ -2881,7 +2902,7 @@ footer{
 <footer>
   <div class="footer-grid">
     <div>
-      <img class="sbg-logo-img" data-logo-fallback="S.B.G. GROUPS" src="img/inline-1.webp" width="807" height="175" loading="lazy" decoding="async" alt="SBG Groups Logo" style="height:48px;width:auto;margin-bottom:12px;filter:brightness(1.1);">
+      <img class="sbg-logo-img" src="img/inline-1.webp" width="807" height="175" loading="lazy" decoding="async" alt="SBG Groups Logo" style="height:48px;width:auto;margin-bottom:12px;filter:brightness(1.1);">
       <div class="footer-tagline">PRECISION · QUALITY · TRUST</div>
       <p class="footer-desc">Bangalore's trusted CNC punching and sheet metal fabrication specialists. Serving industries across Karnataka with precision and reliability.</p>
     </div>
@@ -3204,25 +3225,9 @@ function serverlessEndpoint(name){
   return `${SERVERLESS_BASE_URL}/${name}`;
 }
 
-function replaceBrokenSbgLogo(img){
-  if(!img||img.dataset.logoFallbackApplied==='true')return;
-  img.dataset.logoFallbackApplied='true';
-  const fallback=document.createElement('span');
-  fallback.className='sbg-logo-fallback';
-  fallback.textContent=img.dataset.logoFallback||'S.B.G. GROUPS';
-  img.replaceWith(fallback);
-}
-function attachSbgLogoFallbacks(){
-  document.querySelectorAll('img[data-logo-fallback]').forEach(img=>{
-    img.addEventListener('error',()=>replaceBrokenSbgLogo(img),{once:true});
-    if(img.complete&&(!img.naturalWidth||!img.naturalHeight))replaceBrokenSbgLogo(img);
-  });
-}
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',attachSbgLogoFallbacks,{once:true});
-}else{
-  attachSbgLogoFallbacks();
-}
+/* Image logo only: no text fallback replacement.
+   Keep your real logo file at img/inline-1.webp. */
+function attachSbgLogoFallbacks(){ return; }
 
 
 function escHTML(value){
@@ -4472,6 +4477,17 @@ async function submitForm(){
 }</script>
 
 <!-- Vercel Speed Insights -->
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.vercel-insights.com/v1/script.js';
+    s.defer=true;
+    document.head.appendChild(s);
+  },1200);
+},{once:true});
+</script>
+
 <script type="module" src="/js/speed-insights.js"></script>
 
 <script>
