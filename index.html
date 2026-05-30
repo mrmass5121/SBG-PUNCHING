@@ -194,6 +194,9 @@ header.scrolled{
   letter-spacing:.12em;color:var(--text);
 }
 .logo-sub{font-size:.6rem;letter-spacing:.3em;color:var(--steel);font-family:var(--ff-mono)}
+.sbg-logo-fallback{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--border-green);border-radius:8px;background:rgba(0,200,83,.08);color:var(--green);font-family:var(--ff-display);font-size:1.25rem;letter-spacing:.12em;line-height:1;white-space:nowrap;}
+.logo .sbg-logo-fallback{height:44px;}
+footer .sbg-logo-fallback{height:48px;margin-bottom:12px;filter:brightness(1.1);}
 nav{display:flex;align-items:center;gap:4px}
 .nav-link{
   padding:8px 14px;border-radius:6px;font-size:.85rem;font-weight:500;
@@ -2259,7 +2262,7 @@ footer{
         <span></span><span></span><span></span>
       </button>
       <a href="#" class="logo">
-        <img src="img/inline-1.webp" width="807" height="175" loading="eager" decoding="async" fetchpriority="high" alt="SBG Groups Logo" style="height:44px;width:auto;display:block;">
+        <img class="sbg-logo-img" data-logo-fallback="S.B.G. GROUPS" src="img/sbg-logo.png" data-logo-alt-src="logo.png" width="807" height="175" loading="eager" decoding="async" fetchpriority="high" alt="SBG Groups Logo" style="height:44px;width:auto;display:block;">
       </a>
     </div>
     <nav>
@@ -2735,6 +2738,7 @@ footer{
 
     <div class="production-tabs" role="tablist" aria-label="Production gallery views">
       <button class="production-tab active" type="button" data-gallery-view="collections" role="tab" aria-selected="true">Collections <span data-collections-count></span></button>
+      <button class="production-tab" type="button" data-gallery-view="customised" role="tab" aria-selected="false">Customised Designs <span data-customised-count></span></button>
       <button class="production-tab" type="button" data-gallery-view="featured" role="tab" aria-selected="false">Featured Collection <span data-featured-count></span></button>
       <button class="production-tab" type="button" data-gallery-view="wishlist" role="tab" aria-selected="false">Wishlist <span data-wishlist-count></span></button>
     </div>
@@ -2881,7 +2885,7 @@ footer{
 <footer>
   <div class="footer-grid">
     <div>
-      <img src="img/inline-1.webp" width="807" height="175" loading="lazy" decoding="async" alt="SBG Groups Logo" style="height:48px;width:auto;margin-bottom:12px;filter:brightness(1.1);">
+      <img class="sbg-logo-img" data-logo-fallback="S.B.G. GROUPS" src="img/sbg-logo.png" data-logo-alt-src="logo.png" width="807" height="175" loading="lazy" decoding="async" alt="SBG Groups Logo" style="height:48px;width:auto;margin-bottom:12px;filter:brightness(1.1);">
       <div class="footer-tagline">PRECISION · QUALITY · TRUST</div>
       <p class="footer-desc">Bangalore's trusted CNC punching and sheet metal fabrication specialists. Serving industries across Karnataka with precision and reliability.</p>
     </div>
@@ -3204,6 +3208,34 @@ function serverlessEndpoint(name){
   return `${SERVERLESS_BASE_URL}/${name}`;
 }
 
+function replaceBrokenSbgLogo(img){
+  if(!img)return;
+  const altSrc=img.dataset.logoAltSrc;
+  if(altSrc&&img.dataset.logoAltTried!=='true'&&img.getAttribute('src')!==altSrc){
+    img.dataset.logoAltTried='true';
+    img.src=altSrc;
+    return;
+  }
+  if(img.dataset.logoFallbackApplied==='true')return;
+  img.dataset.logoFallbackApplied='true';
+  const fallback=document.createElement('span');
+  fallback.className='sbg-logo-fallback';
+  fallback.textContent=img.dataset.logoFallback||'S.B.G. GROUPS';
+  img.replaceWith(fallback);
+}
+function attachSbgLogoFallbacks(){
+  document.querySelectorAll('img[data-logo-fallback]').forEach(img=>{
+    img.addEventListener('error',()=>replaceBrokenSbgLogo(img));
+    if(img.complete&&(!img.naturalWidth||!img.naturalHeight))replaceBrokenSbgLogo(img);
+  });
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',attachSbgLogoFallbacks,{once:true});
+}else{
+  attachSbgLogoFallbacks();
+}
+
+
 function escHTML(value){
   return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
@@ -3266,6 +3298,13 @@ function isWishlisted(product){
 }
 function productReviewKey(product){
   return productSlug(product);
+}
+
+function isCustomisedDesignProduct(product){
+  const tags=Array.isArray(product?.tags)?product.tags:[];
+  const features=Array.isArray(product?.features)?product.features:[];
+  const text=[product?.cat,product?.category,...tags,...features].filter(Boolean).join(' ').toLowerCase();
+  return /customi[sz]ed/.test(text)&&/design/.test(text);
 }
 function productMediaList(product){
   if(Array.isArray(product?.images)&&product.images.length)return product.images;
@@ -3562,11 +3601,15 @@ function featuredCollectionProducts(){
 function collectionProducts(){
   return products.slice(0,30);
 }
+function customisedDesignProducts(){
+  return products.filter(isCustomisedDesignProduct).slice(0,30);
+}
 function wishlistCollectionProducts(){
   return products.filter(product=>productWishlist.has(productSlug(product)));
 }
 function updateGalleryTabs(){
   const collectionsCount=collectionProducts().length;
+  const customisedCount=customisedDesignProducts().length;
   const featuredCount=featuredCollectionProducts().length;
   const wishlistCount=wishlistCollectionProducts().length;
   document.querySelectorAll('[data-gallery-view]').forEach(button=>{
@@ -3575,11 +3618,12 @@ function updateGalleryTabs(){
     button.setAttribute('aria-selected',active?'true':'false');
   });
   document.querySelector('[data-collections-count]')?.replaceChildren(String(collectionsCount));
+  document.querySelector('[data-customised-count]')?.replaceChildren(String(customisedCount));
   document.querySelector('[data-featured-count]')?.replaceChildren(String(featuredCount));
   document.querySelector('[data-wishlist-count]')?.replaceChildren(String(wishlistCount));
 }
 function setGalleryView(view){
-  activeGalleryView=['collections','featured','wishlist'].includes(view)?view:'collections';
+  activeGalleryView=['collections','customised','featured','wishlist'].includes(view)?view:'collections';
   closeProductionDetailViewOnly();
   renderProducts(currentFilter);
 }
@@ -3637,6 +3681,7 @@ function renderProducts(filter){
   if(!recommendedGrid)return;
   const sources={
     collections:collectionProducts,
+    customised:customisedDesignProducts,
     featured:featuredCollectionProducts,
     wishlist:wishlistCollectionProducts
   };
