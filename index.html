@@ -1648,6 +1648,7 @@ nav{display:flex;align-items:center;gap:4px}
   gap:16px;
   align-items:start;
   justify-content:start;
+  min-height:500px;
 }
 .empty-gallery-note{
   grid-column:1 / -1;
@@ -2807,9 +2808,7 @@ window.SBG_CONFIG=Object.assign({},window.SBG_CONFIG||{},{
 
 /* ─── INTRO ─── */
 window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    document.getElementById('intro').classList.add('hidden');
-  },250);
+  document.getElementById('intro').classList.add('hidden');
 });
 
 /* ─── HEADER SCROLL ─── */
